@@ -28,7 +28,7 @@ class CertificateMetadata(object):
         self.blockchain_cert_file_name = os.path.join(blockcerts_dir, uid + file_extension)
         self.final_blockchain_cert_file_name = os.path.join(final_blockcerts_dir, uid + file_extension)
 
-
+# 인증서 batch를 준비하는 단계로 각 인증서에 metadata를 생성하는 함수
 def prepare_issuance_batch(unsigned_certs_dir, signed_certs_dir, blockchain_certs_dir, work_dir,
                            file_extension=JSON_EXT):
     """
@@ -41,11 +41,13 @@ def prepare_issuance_batch(unsigned_certs_dir, signed_certs_dir, blockchain_cert
     :return:
     """
 
-    # create work dir if it doesn't already exist
+    # work dir 가 존재하지 않는다면 생성
     os.makedirs(work_dir, exist_ok=True)
 
-    # create final output dirs if they don't already exist
+    # 블록체인 인증서가 포함될 디렉토리를 생성
     os.makedirs(blockchain_certs_dir, exist_ok=True)
+
+    # create final output dirs if they don't already exist
     os.makedirs(signed_certs_dir, exist_ok=True)
 
     # ensure previous processing state, if any, is cleaned up
@@ -64,6 +66,7 @@ def prepare_issuance_batch(unsigned_certs_dir, signed_certs_dir, blockchain_cert
     os.makedirs(signed_certs_work_dir, exist_ok=True)
     os.makedirs(blockchain_certs_work_dir, exist_ok=True)
 
+    # 파일 입력 패턴을 지정
     cert_info = collections.OrderedDict()
     input_file_pattern = str(os.path.join(unsigned_certs_work_dir, '*' + file_extension))
 
@@ -85,7 +88,7 @@ def prepare_issuance_batch(unsigned_certs_dir, signed_certs_dir, blockchain_cert
     logging.info('Processing %d certificates', len(cert_info))
     return cert_info
 
-
+# final_blockchain_cert_file_name 폴더로 생성된 metadata가 복사됨
 def copy_output(certificates_metadata):
     for _, metadata in certificates_metadata.items():
         from_file = metadata.blockchain_cert_file_name
