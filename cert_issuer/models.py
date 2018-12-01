@@ -64,6 +64,7 @@ class Signer(object):
         pass
 
 
+# signer.py 에서 SecretManager 구현
 class SecretManager(object):
     def __init__(self, signer):
         self.signer = signer
