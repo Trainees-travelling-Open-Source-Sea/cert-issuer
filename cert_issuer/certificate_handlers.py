@@ -12,6 +12,11 @@ from cert_issuer.signer import FinalizableSigner
 
 class CertificateV2Handler(CertificateHandler):
     def get_byte_array_to_issue(self, certificate_metadata):
+        '''
+        :metadata를 통해 certificate를 불러옴
+        :helpers.py에서 metadata 생성
+        :return byte_array   
+        '''        
         certificate_json = self._get_certificate_to_issue(certificate_metadata)
         normalized = normalize_jsonld(certificate_json, detect_unmapped_fields=False)
         return normalized.encode('utf-8')
@@ -25,10 +30,12 @@ class CertificateV2Handler(CertificateHandler):
         certificate_json = self._get_certificate_to_issue(certificate_metadata)
         certificate_json['signature'] = merkle_proof
 
+        # certificate_matadata로 json파일 생성
         with open(certificate_metadata.blockchain_cert_file_name, 'w') as out_file:
             out_file.write(json.dumps(certificate_json))
 
     def _get_certificate_to_issue(self, certificate_metadata):
+        # get_byte_array_to_issue에서 byte_array 생성하기 위해 json파일 읽음
         with open(certificate_metadata.unsigned_cert_file_name, 'r') as unsigned_cert_file:
             certificate_json = json.load(unsigned_cert_file)
         return certificate_json
