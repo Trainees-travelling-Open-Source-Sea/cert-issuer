@@ -12,8 +12,10 @@ if __package__ is None and not hasattr(sys, 'frozen'):
 
 def cert_issuer_main(args=None):
     from cert_issuer import config
+    /* conf.ini에서 설정 읽어 들이는 듯 함 */
     parsed_config = config.get_config()
     from cert_issuer import issue_certificates
+    /* issue_certificates.py의 main을 실행 */
     issue_certificates.main(parsed_config)
 
 
