@@ -15,6 +15,7 @@ class FileSecretManager(SecretManager):
         self.issuing_address = issuing_address
 
     def start(self):
+        # 인터넷이 꺼져있고, USB가 꽂혀 있으면 start
         if self.safe_mode:
             check_internet_off(self.path_to_secret)
         else:
@@ -26,6 +27,7 @@ class FileSecretManager(SecretManager):
 
     def stop(self):
         self.wif = None
+        # 인터넷이 켜져있고, USB가 꽂혀 있으면 stop
         if self.safe_mode:
             check_internet_on(self.path_to_secret)
         else:
