@@ -2,12 +2,12 @@ import logging
 import os
 
 import bitcoin
-import configargparse
+import configargparse #config 파일이나 변수들을 통해 옵션을 설정할 수 있는 모듈.
 from cert_core import BlockchainType, Chain, chain_to_bitcoin_network, UnknownChainError
 
-PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_PATH = os.path.join(PATH, 'data')
-WORK_PATH = os.path.join(PATH, 'work')
+PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))# 입력받은 파일/디렉터리의 경로를 반환
+DATA_PATH = os.path.join(PATH, 'data') #PATH 변수에 저장된 경로에 'data' 경로를 병합하여 새 경로 생성.
+WORK_PATH = os.path.join(PATH, 'work') #PATH 변수에 저장된 경로에 'work' 경로를 병합하여 새 경로 생성.
 
 # Estimate fees assuming worst case 3 inputs
 ESTIMATE_NUM_INPUTS = 3
@@ -21,7 +21,7 @@ def configure_logger():
     # Configure logging settings; create console handler and set level to info
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
-    handler = logging.StreamHandler()
+    handler = logging.StreamHandler() #스트림으로 로그를 출력하는 핸들러
     handler.setLevel(logging.INFO)
     formatter = logging.Formatter("%(levelname)s - %(message)s")
     handler.setFormatter(formatter)
@@ -29,7 +29,7 @@ def configure_logger():
 
 
 # restructured arguments to put the chain specific arguments together.
-def add_arguments(p):
+def add_arguments(p): #요소들을 추가 및 초기화 해주는 함수
     p.add('-c', '--my-config', required=False, env_var='CONFIG_FILE',
           is_config_file=True, help='config file path')
     p.add_argument('--issuing_address', required=True, help='issuing address')
@@ -52,7 +52,7 @@ def add_arguments(p):
                    help='Used to make sure your private key is not plugged in with the wifi.')
     p.add_argument('--no_safe_mode', dest='safe_mode', default=False, action='store_false',
                    help='Turns off safe mode. Only change this option for testing or unit testing.')
-    # bitcoin arguments
+    # bitcoin arguments 
     p.add_argument('--dust_threshold', default=0.0000275, type=float,
                    help='blockchain dust threshold (in BTC) -- below this 1/3 is fees.')
     p.add_argument('--tx_fee', default=0.0006, type=float,
@@ -75,7 +75,7 @@ def add_arguments(p):
 
 
 def get_config():
-    configure_logger()
+    configure_logger() #configure_logger 함수 호출
     p = configargparse.getArgumentParser(default_config_files=[os.path.join(PATH, 'conf.ini'),
                                                                '/etc/cert-issuer/conf.ini'])
     add_arguments(p)
